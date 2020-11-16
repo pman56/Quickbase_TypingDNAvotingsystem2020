@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="" />
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="bootstrap.min.css">
+<script src="jquery.min.js"></script>
+<script src="bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+
+<script>
+
+
+
+
+//check if session is set and prevent Direct Access to the App.
+
+var session_fullname = localStorage.getItem('dnafullname3');
+var session_userid= localStorage.getItem('dnauserid3');
+
+
+
+if (session_userid == null || session_userid == undefined) {
+
+alert('Hello!. Direct Access to Voters System not Allowed. Voters System Protected by TypingDna');
+window.location='typingdna_defence.html';
+
+}
+
+
+
+
+
+
+
+</script>
+
+
+
+<style>
+.res_center_css{
+position:absolute;top:50%;left:50%;margin-top: -50px;margin-left -50px;width:400px;height:400px;
+}
+
+.text{
+color:grey;
+font-size:14px;
+border:none;
+cursor:pointer;
+}
+
+
+
+.text:hover{
+color:black;
+}
+
+
+
+.register_btn{
+background-color: #0088cc;
+padding: 10px;
+color:white;
+font-size:14px;
+border-radius: 15%;
+border: none;
+cursor: pointer;
+text-align: center;
+
+}
+.register_btn:hover {
+background: black;
+color:white;
+}	
+
+
+.access{
+border-style: solid; border-width:4px; border-color:white;color:white;font-size:14px;
+}
+
+.access:hover{
+color:black;
+
+}
+
+
+
+
+.bgImage {
+    overflow-x: hidden;
+    position: fixed;
+    z-index: 9999;
+    width:100vw;
+    height: 100vh;
+    background: url(voter2.png) center no-repeat #0088cc;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+}
+
+</style>
+
+
+
+
+
+
+<script type="text/javascript" >
+
+$(document).ready(function(){
+
+var session_fullname1 = localStorage.getItem('dnafullname3');
+$('.tfullname_dna').html(session_fullname1);
+
+
+
+});
+
+
+
+
+
+</script>
+
+
+ 
+</head>
+<body>
+
+
+
+
+
+
+
+    <div class="bgImage">
+
+
+
+<br><br>
+<center><p  style='font-size:30px;color:white;font-family:comic sans ms;padding:16px;border-radius:15%;'>
+
+Team Voting System</p> <span style='color:orange;font-size:20px;'>Secured By TypingDNA Biometrics</span></center><br><br>
+
+
+
+
+
+<div class='row'>
+<div class='col-sm-12' style='font-size:18px; background:#ddd;padding:16px;'>
+<b><span style='color:#800000;'>Welcome <b><span style='font-size:16px;' class='tfullname_dna'><span></b> <a style='float:right;' title='Logout' href="logout.html">Logout</a> &nbsp; &nbsp;&nbsp;&nbsp;<a style='display:none;' title='Add New Contestant' href="logout.html">Add New Contestant</a></b><br>
+
+Note: You can only Vote for each Contestant just Once.
+</div>
+</div><br>
+
+
+
+<script>
+
+$(document).ready(function(){
+
+
+var token= 1234;
+
+if(token ==''){
+alert('something is wrong');
+}
+
+
+else{
+
+
+$("#loader-contestant").fadeIn(400).html('<br><div style="color:white;background:#ec5574;padding:10px;"><i class="fa fa-spinner fa-spin" style="font-size:20px"></i>&nbsp;Please Wait,Loading Contestants...</div>');
+var datasend = {token:token};
+
+
+	
+		$.ajax({
+			
+			type:'POST',
+			url:'contestants_load.php',
+			data:datasend,
+                        crossDomain: true,
+			cache:false,
+			success:function(msg){
+
+$("#loader-contestant").hide();
+$("#result-contestant").html(msg);
+//setTimeout(function(){ $('#result-contestant(''); }, 5000);				
+
+//location.reload();	
+}
+			
+		});
+		
+		}
+
+
+});
+
+
+
+</script>
+
+
+
+<!-- c START-->
+<div id="loader-contestant"></div>
+<div id="result-contestant"></div>
+
+
+<!--c ENDS-->
+
+<p></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

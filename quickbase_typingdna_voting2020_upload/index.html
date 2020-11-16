@@ -1,0 +1,454 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <title>Team Voting System Powered By Quickbase & TypingDNA</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="landing page, website design" />
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="bootstrap.min.css">
+<script src="jquery.min.js"></script>
+<script src="bootstrap.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+
+
+.res_center_css{
+position:absolute;top:50%;left:50%;margin-top: -50px;margin-left -50px;width:400px;height:400px;
+}
+
+.text{
+color:grey;
+font-size:14px;
+border:none;
+cursor:pointer;
+}
+
+
+
+.text:hover{
+color:black;
+}
+
+
+
+.register_btn{
+background-color: #0088cc;
+padding: 10px;
+color:white;
+font-size:14px;
+border-radius: 15%;
+border: none;
+cursor: pointer;
+text-align: center;
+
+}
+.register_btn:hover {
+background: black;
+color:white;
+}	
+
+
+.access{
+border-style: solid; border-width:4px; border-color:white;color:white;font-size:14px;
+}
+
+.access:hover{
+color:black;
+
+}
+
+
+
+
+.bgImage {
+    overflow-x: hidden;
+    position: fixed;
+    z-index: 9999;
+    width:100vw;
+    height: 100vh;
+    background: url(voter2.png) center no-repeat #0088cc;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+}
+
+</style>
+
+
+
+<script>
+
+
+                $(function () {
+                $('#save_btn').click(function () {
+                   
+                   var email = $('#email').val();
+                   var fullname = $('#fullname').val();
+                    var password = $('#password').val();
+                    var confirm_password =$('#confirm-password').val();
+                    
+                    var emailaddress_pot = $('#emailaddress_pot').val();
+
+                    //preparing Email for validations
+                    var atemail = email.indexOf("@");
+                    var dotemail = email.lastIndexOf(".");
+
+
+
+if(password != confirm_password){
+alert('Password Does not Match');
+return false;
+}
+
+else if(email==""){
+alert('please Enter Email Address');
+}
+
+else  if (atemail < 1 || ( dotemail - atemail < 2 )){
+alert("Please enter valid email Address")
+}
+
+else if(password==""){
+alert('please Enter Password');
+}
+
+else if(fullname==""){
+alert('please Enter Your Fullname');
+}
+
+else{
+
+
+          var form_data = new FormData();
+
+          form_data.append('email', email);
+          form_data.append('fullname', fullname);
+          form_data.append('password', password);
+          form_data.append('emailaddress_pot', emailaddress_pot);
+                 
+                    $('#loader_send').fadeIn(400).html('<br><span class="well" style="color:black"><i class="fa fa-spinner fa-spin" style="font-size:20px"></i> &nbsp;Please Wait, Your Data is being Submitted</span>');
+                    $.ajax({
+                        url: 'signup_action.php',
+                        data: form_data,
+                        processData: false,
+                        contentType: false,
+                        ache: false,
+                        type: 'POST',
+                      
+                        success: function (msg) {
+                               
+				$('#loader_send').hide();
+				$('.result_data').fadeIn('slow').prepend(msg);
+				//$('#alertdata').delay(5000).fadeOut('slow');
+                                
+
+
+//strip all html elemnts using jquery
+var html_stripped = jQuery(msg).text();
+//alert(html_stripped);
+
+//check occurrence of word (successfully) from backend output already html stripped.
+var Frombackend = html_stripped;
+var bcount = (Frombackend.match(/successfully/g) || []).length;
+//alert(bcount);
+
+
+ $('#email').val('');
+ $('#fullname').val('');
+$('#password').val('');
+
+
+
+if(bcount > 0){
+ $('#email').val('');
+ $('#fullname').val('');
+$('#password').val('');
+}
+
+
+
+
+                        }
+                    });
+} // end if validate
+                });
+            });
+
+
+
+
+
+
+// start checking for email availability
+$(document).ready(function(){
+    $('#email').keyup(function(){ 
+       var email = $('#email').val();
+ if(email.length < 2) {
+// ensure that user must type something first at least 2 characters before fetching database records
+return false;
+}
+       var token = 101201;
+        var ShowResult1 = $('#email_check');
+            ShowResult1.html('<div style="background:#800000;color:white;padding:10px;">Checking Email Availability... <i class="fa fa-spinner fa-spin" style="font-size:20px"></i>  </div>'); // you can use loading animation here
+           var datasend = "email="+ email + "&token=" + token;
+            $.ajax({
+            type : 'POST',
+            data : datasend,
+            url  : 'email_check.php',
+            success: function(data){
+
+                if(data == 0){
+  ShowResult1.html('<br><span class="well alert alert-success"><font color=green>This Email Address <b>('+email+')</b> is Available</font></span>');
+                }
+                else if(data > 0){
+  ShowResult1.html('<br><span class="well alert alert-warning"><font color=red>This Email Address <b>('+email+')</b> is Taken....</font></span>');
+                }
+                else{
+  ShowResult1.html('<br><span class="well alert alert-warning"><font color=red>We have problem with your Query.</font></span>');
+                }
+            }
+
+            });
+    });
+});
+
+// end checking for email availability
+
+        </script>
+
+
+
+
+
+
+
+        <script>
+
+
+//login starts
+$(document).ready(function(){
+                $('#login_btn').click(function () {
+                 
+                    var email = $('#email1').val();
+                    var password = $('#password1').val();
+                    var emailaddress_pot = $('#emailaddress_pot1').val();
+                  
+
+                    //preparing Email for validations
+                    var atemail = email.indexOf("@");
+                    var dotemail = email.lastIndexOf(".");
+
+if(email==""){
+alert('please Enter Email Address');
+}
+
+else  if (atemail < 1 || ( dotemail - atemail < 2 )){
+alert("Please enter valid email Address")
+}
+
+else if(password==""){
+alert('please Enter Password');
+}
+
+else{
+
+
+          var form_data = new FormData();
+          form_data.append('email', email);
+          form_data.append('password', password);
+          form_data.append('emailaddress_pot', emailaddress_pot);
+
+                    $('#loader_login').fadeIn(400).html('<br><span class="well" style="color:black"><i class="fa fa-spinner fa-spin" style="font-size:20px"></i>  &nbsp;Please Wait, Your Data is being Processed...</span>');
+                    $.ajax({
+                        url: 'login_action.php',
+                        data: form_data,
+                        processData: false,
+                        contentType: false,
+                        ache: false,
+                        type: 'POST',
+                        
+                        success: function (msg) {
+                                
+				$('#loader_login').hide();
+				$('#result_login').fadeIn('slow').prepend(msg);
+                                $('#alerts_login').delay(10000).fadeOut('slow');
+                                
+
+
+$('#email1').val('');
+$('#password1').val('');
+
+
+                        }
+                    });
+} // end if validate
+                });
+            });
+
+
+// login ends here
+
+
+
+
+
+
+
+        </script>
+
+ 
+</head>
+<body>
+
+
+
+
+
+<div class="padding-top:60px;"></div>
+
+<div class='bgImage'>
+
+<br><br>
+<center><p  style='font-size:30px;color:white;font-family:comic sans ms;padding:16px;border-radius:15%;'>
+
+Team Voting System</p></center><br>
+
+
+<div class='row'>
+<div class='col-sm-12' style='font-size:18px; background:#ddd;padding:16px;'>
+<b>Powered By Quickbase & TypingDNA 2-Way Factor Biometric Authentications</b><br>
+
+  <p class="text">
+Protect Yours Voters Data. Protect Your Voting System. Help eliminate Frauds in Voting System. Vote for your Teams wherever you go.<br>
+
+
+
+ </p>
+</div>
+</div><br>
+
+
+<br><br>
+
+<div class='row'>
+
+<div class='col-sm-5' style="background:#ddd;">
+
+
+<!--start form-->
+<form id="" method="post">
+
+<center><h3> Register Members</h3></center>
+
+ <div class="form-group">
+                <label>Email</label>
+              <input type="text" class="col-sm-12 form-control" id="email" name="email" placeholder="Enter email">
+<div class="result1" id="email_check"></div>
+            </div>
+
+
+ <div class="form-group">
+               <label>Password</label>
+              <input type="password" class="col-sm-12 form-control" id="password" name="password" placeholder="Enter password">
+            </div>
+
+ <div class="form-group">
+              <label>Confirm Password</label>
+              <input type="password" class="col-sm-12 form-control" id="confirm-password" name="confirm-password" placeholder=" Confirm Password">
+            </div>
+
+
+<style>
+.secured_pot{ display:none; } /* hide because is spam protection */
+</style>
+<input class="secured_pot" type="text" name="emailaddress_pot" id="emailaddress_pot" />
+
+
+
+
+<div class="form-group">
+              <label>Fullname</label>
+              <input type="text" class="col-sm-12 form-control" id="fullname" name="fullname" placeholder="Enter Full Name">
+            </div>
+
+<br><br>
+
+                    <div class="form-group">
+                            
+
+                        <div id="loader_send"></div>
+                        <div class="result_data"></div>
+                    </div>
+
+                    <input type="button" id="save_btn" class="register_btn" value="Register" />
+                </form>
+
+<!--end form-->
+
+
+
+
+
+</div>
+
+<div class='col-sm-2' style='padding-top:150px;'>
+<div style='background:#0088cc;color:white;font-size:20px;padding:20px;' class='img-rounded'>Quickbase <center>&</center> TypingDNA</div>
+</div>
+
+
+<div class='col-sm-5' style="background:#ddd">
+
+
+<center><h3>Members Login</h3></center>
+
+
+<!--start form-->
+
+ <div class="form-group">
+              <label style="padding:6px;font-size:16px;"  for="email">
+<span class="fa fa-envelope-o"></span> Email</label>
+              <input type="text" class="col-sm-12 form-control" id="email1" name="email1" placeholder="Enter email" value="">
+            </div>
+
+
+ <div class="form-group">
+              <label style="padding:6px;font-size:16px;"  for="psw">
+<span class="fa fa-eye"></span> Password</label>
+              <input type="password" class="col-sm-12 form-control" id="password1" name="password1" placeholder="Enter password" value="">
+            </div>
+
+
+<style>
+.secured_pot{ display:none; } /* hide because is spam protection */
+</style>
+<input class="secured_pot" type="text" name="emailaddress_pot1" id="emailaddress_pot1" />
+<div id="loader_login"></div>
+                        <div id="result_login"></div><br><br>
+
+                    <input type="button" id="login_btn" class="register_btn" value="login Now" />
+                
+
+<!--end form-->
+
+
+
+
+
+
+
+</div>
+
+</div>
+
+
+
+</div>
